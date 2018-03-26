@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="http://i.imgur.com/7TvbO2K.png">
+  <title>實況主中途之家</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" integrity="sha384-3AB7yXWz4OeoZcPbieVW64vVXEwADiYyAEhwilzWsLw+9FgqpyjjStpPnpBO8o8S"
+    crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+  <script src="./jquery-ui.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.min.js"></script>
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/vue-slider-component@2.6.1/dist/index.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    html,
+    #app {
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      margin: 0;
+      overflow: hidden;
+      color: #D3D3D3;
+      background-color: #141414;
+      height: 100%;
+      width: 100%;
+    }
+
+    .top {
+      height: 10%;
+      width: 100%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #channel_title {
+      margin: 1%;
+      font-size: 20px;
+      font-weight: bold;
+      max-width: 30%;
+      text-align: center;
+    }
+
+    #dropmain {
+      text-align: center;
+      margin-top: 40px;
+      margin-left: 1%;
+    }
+
+    .bottom {
+      height: 90%;
+      width: 100%;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .mainp {
+      width: calc(100% - 340px);
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tab-wrap {
+      width: 50%;
+      height: 100%;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .tabs .tab a,
+    .tabs .tab a:hover,
+    .tabs .tab a.active {
+      color: #26A69A;
+    }
+
+    .tabs .indicator {
+      background-color: #26A69A;
+    }
+
+    .slider {
+      width: 80%;
+    }
+
+    .close {
+      pointer-events: auto;
+      margin: 0 auto;
+    }
+
+    .floatw {
+      width: 35%;
+      height: 35%;
+      position: absolute;
+      background-color: #303030;
+      z-index: 10;
+    }
+
+    .floatwi {
+      width: calc(100% - 30px);
+      height: calc(100% - 30px);
+      margin: 15px;
+    }
+
+    .ui-resizable-handle {
+      z-index: auto !important;
+    }
+
+    .floatlist {
+      width: 340px;
+      height: 90%;
+      margin: 0;
+      padding-bottom: 1rem;
+    }
+
+    .layer {
+      border-bottom: 1px solid #111111 !important;
+      display: flex;
+      align-items: center;
+    }
+
+    .layericon {
+      margin-left: 1%;
+      margin-right: 1%;
+      width: 8%;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .layername {
+      width: 90%;
+    }
+
+    .scrollbar {
+      width: 100%;
+      max-height: 100%;
+      overflow: auto;
+    }
+
+    .inputfloat {
+      padding-left: 1rem;
+      border-bottom: 1px solid #111111 !important;
+    }
+
+    .scrollbar::-webkit-scrollbar {
+      height: 4px;
+      width: 3px;
+      background: #ccc;
+      opacity: .3;
+    }
+
+    .scrollbar::-webkit-scrollbar-button {
+      display: none;
+    }
+
+    .scrollbar::-webkit-scrollbar-piece {
+      background: #eee;
+    }
+
+    .scrollbar::-webkit-scrollbar-thumb {
+      background: #666;
+    }
+
+    #chatroom {
+      width: 340px;
+      height: 100%;
+      background-color: #212121;
+      border-top: 1px solid #111111;
+    }
+
+    .chatembed {
+      width: 100%;
+      height: 100%;
+    }
+
+    #setting,
+    #fav {
+      width: 100%;
+      height: 100%;
+      background-color: #212121;
+    }
+
+    .collection {
+      border-style: none !important;
+    }
+
+    .btn {
+      margin-right: 1%;
+      margin-left: 1%;
+      padding: 0 1rem !important;
+    }
+
+    .fixed-action-btn {
+      bottom: auto !important;
+    }
+
+    .fixed-action-btn.horizontal ul li {
+      margin: 0px 5px 0 0 !important;
+    }
+
+    .fixed-action-btn.horizontal ul {
+      right: 44px;
+    }
+
+    .btn-ru {
+      position: fixed;
+      top: 5px;
+      right: 5px;
+      z-index: 100;
+    }
+
+    .fbpage {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: 99;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(50, 50, 50, 0.8);
+    }
+
+    .fbbox {
+      width: 500px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tabs .tab {
+      overflow: hidden;
+    }
+
+    .pointer {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- floating player component template -->
+  <template id="player">
+    <div v-if="channel!=''" class="floatw" :id="channel" :style="[{'opacity': opacity} , {'z-index': z_index }]">
+      <div class="floatwi">
+        <iframe class="framefix" width="100%" height="100%" frameborder="0" framespacing="0" :src="'https://player.twitch.tv/?channel='+channel">
+        </iframe>
+      </div>
+    </div>
+  </template>
+  <div id="app">
+    <!-- Vue: Menu button -->
+    <div v-if="!showfacebookpage" class="btn-ru fixed-action-btn horizontal">
+      <a class="btn-floating  teal waves-effect waves-light ">
+        <i class=" material-icons">menu</i>
+      </a>
+      <ul>
+        <li>
+          <a v-on:click="showfacebookpage = !showfacebookpage" class="btn-floating waves-effect waves-light teal">
+            <i class="fab fa-facebook-square"></i>
+          </a>
+        </li>
+        <li>
+          <a v-on:click="reloadinfo" class="btn-floating  waves-effect waves-light teal" title="主畫面資訊重整">
+            <i class="fas fa-desktop" style="font-size: 1.2rem;"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <!-- facebook page -->
+    <div class="fbpage" v-if="showfacebookpage">
+      <li>
+        <a style="position: absolute;top:5px;right:5px;" v-on:click="showfacebookpage = false" class="btn-floating waves-effect waves-light teal">
+          <i class=" material-icons">close</i>
+        </a>
+      </li>
+      <div class="fbbox">
+        <iframe class="fbbox" src="https://www.facebook.com/v2.12/plugins/page.php?adapt_container_width=true&app_id=&channel=http%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter%2Fr%2FMs1VZf1Vg1J.js%3Fversion%3D42%23cb%3Df74608d1c2edc%26domain%3D%26origin%3Dfile%253A%252F%252F%252Ff6ad99404e22cc%26relation%3Dparent.parent&container_width=840&hide_cover=false&href=https%3A%2F%2Fwww.facebook.com%2Ftetristhegrandmaster3&locale=zh_TW&sdk=joey&show_facepile=true&small_header=false&tabs=timeline&width=500&height=720"
+          frameborder="0"></iframe>
+      </div>
+    </div>
+    <!-- create floating player component -->
+    <playerw v-for="channel in vlist" :channel="channel.name" :opacity="channel.value/100" :z_index="zindex.indexOf(channel.name)+20"></playerw>
+    <!-- top bar -->
+    <div class="top">
+      <div id="channel_title">
+        {{title}}
+      </div>
+      <!-- materialize.css dropdown button -->
+      <a class='dropdown-button btn' href='#' data-activates='dropmain' style="width:10%">主畫面</a>
+      <ul id='dropmain' class='dropdown-content'>
+        <li v-on:click="joinmain(1)" v-if="theater!=''">
+          <a href="#!">三民大戲院</a>
+        </li>
+        <li class="divider"></li>
+        <li v-on:click="joinmain(2)">
+          <a href="#!">彩學台</a>
+        </li>
+        <li class="divider"></li>
+        <li v-on:click="joinmain(3)" v-if="host!=''">
+          <a href="#!">Host:{{host}}</a>
+        </li>
+        <li>
+          <a target="_blank" href="./clips.html">精華剪輯</a>
+        </li>
+      </ul>
+      <!-- materialize.css tab -->
+      <div class="tab-wrap">
+        <ul class="tabs scrollbar grey darken-4" style="overflow-y: hidden; height:80%;">
+          <li v-for="channel in chatlist" class="tab">
+            <a :href="'#'+channel+'-chat'">{{channel}}</a>
+          </li>
+          <li class="tab">
+            <a class="active" href="#tm3chat">彩學</a>
+          </li>
+          <li class="tab" v-on:click="refreshslider">
+            <a href="#setting">視窗設定</a>
+          </li>
+          <li class="tab">
+            <a href="#fav" style="font-size: 2rem;">
+              <i class="fab fa-twitch"></i>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="bottom">
+      <!-- main player -->
+      <div class="mainp">
+        <img src="https://i.imgur.com/tqZiViA.png" style="height:100%" title="說明">
+      </div>
+      <div id="chatroom">
+        <!-- materialize.css tab body -->
+        <div id="tm3chat" class="chatembed">
+          <iframe class="framefix" frameborder="0" scrolling="no" src="http://www.twitch.tv/tetristhegrandmaster3/chat" height="100%"
+            width="340px">
+          </iframe>
+        </div>
+        <div id="setting">
+          <!-- Input Twitch ID box -->
+          <div class="input-field inputfloat">
+            <input id="insert" type="text" pattern="^[a-zA-Z0-9][\w]{3,24}$" class="validate" v-model="addchannel">
+            <label for="Channel" style="padding-left: 1rem;">新增浮動多開</label>
+            <button v-on:click="joinchannel(addchannel)" class="btn waves-effect waves-light" style="position: absolute;right:0;top:0;">
+              <i class="material-icons">send</i>
+            </button>
+          </div>
+          <!-- Layer control List (zindex in vue) -->
+          <div class="collection floatlist grey darken-4">
+            <transition-group class="scrollbar" style="display: flex; flex-direction: column-reverse;">
+              <div class="layer" v-for="(channel, index) in zindex" :key="'channel-'+index">
+                <!-- Layer control button -->
+                <div class="layericon">
+                  <div v-if="index!=zindex.length-1" class="layerup pointer" v-on:click="layerup(index)">
+                    <i class="fas fa-arrow-circle-up"></i>
+                  </div>
+                  <div v-if="index!=0" class="layerdown pointer" v-on:click="layerdown(index)">
+                    <i class="fas fa-arrow-circle-down"></i>
+                  </div>
+                </div>
+                <!-- Layer control channel info -->
+                <div class="layername collection-item grey darken-4">
+                  <div style="display: flex; align-items: center;">
+                    <span style="font-size: 1.2rem;padding-right: 5px">{{channel}}</span>
+                    <span class="material-icons pointer" title="關閉" v-on:click="close(channel)" style="padding-right: 5px">close</span>
+                    <span class="material-icons pointer" v-if="chatlist.indexOf(channel) == -1" title="加入聊天室" v-on:click="addchat(channel)">chat</span>
+                  </div>
+                  <!-- Opacity Slider -->
+                  <vue-slider ref="slider" v-model="vlist.find(function(c){return c.name==channel;}).value" interval="10" min="0" max="100"
+                    value="100" tooltip="hover"></vue-slider>
+                </div>
+              </div>
+            </transition-group>
+          </div>
+        </div>
+        <!-- Twitch Following list -->
+        <div id="fav">
+          <!-- Input Twitch ID box -->
+          <div class="input-field inputfloat">
+            <input id="insert" type="text" pattern="^[a-zA-Z0-9][\w]{3,24}$" class="validate" v-model="mytid">
+            <label for="Channel" style="padding-left: 1rem;">輸入ID來顯示瀏覽追隨列表</label>
+            <button v-on:click="searchchannel(mytid)" class="btn waves-effect waves-light" style="position: absolute;right:0;top:0;">
+              <i class="material-icons">refresh</i>
+            </button>
+          </div>
+          <!-- Following list -->
+          <div class="collection floatlist grey darken-4 scrollbar">
+            <div class="layer" v-for="(channel, index) in followlist" :key="'fchannel-'+index">
+              <!-- Add button (+) -->
+              <div class="layericon">
+                <div v-if="vlist.findIndex(item => item.name == channel.id)==-1" class="pointer" v-on:click="joinchannel(channel.id)">
+                  <i class="fas fa-plus-circle"></i>
+                </div>
+              </div>
+              <!-- Show Twitch Channel info -->
+              <div class="layername collection-item grey darken-4">
+                <div style="display: flex; align-items: center;justify-content: space-between;">
+                  <div style="width:50%;">
+                    <img :src="channel.pic" :title="channel.game" style="width:100%;vertical-align: middle;">
+                  </div>
+                  <div style="width:49%; text-align: center;">
+                    <div style="font-size: 1rem;width:100%;height: 2rem;  text-overflow: ellipsis;overflow: hidden;white-space: nowrap;" :title="channel.status">{{channel.status}}</div>
+                    <div style="font-size: 0.8rem;width:100%;">{{channel.name}} ({{channel.id}})</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Chat List Body (chatlist in vue)-->
+        <div v-for="channel in chatlist" :id="channel+'-chat'" class="chatembed">
+          <iframe class="framefix" frameborder="0" scrolling="no" :src="'http://www.twitch.tv/'+channel+'/chat'" height="100%" width="340px">
+          </iframe>
+          <button v-on:click="closechat(channel)" class="btn waves-effect waves-light" style="position: absolute;right:0;top:11%;">
+            <i class="material-icons">close</i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <script>
+      Vue.component('playerw', {
+        template: '#player',
+        props: ['channel', 'opacity', "z_index"],
+        mounted() {
+          /**
+          Enable Jquery UI
+          [Bug fixed] disable pointer-events will give more smooth result when you drag float window
+          **/
+          $('#' + this.channel).draggable({
+            start: function () {
+              $(".framefix").css('pointer-events', 'none');
+            },
+            drag: function () {
+              $(".framefix").css('pointer-events', 'none');
+            },
+            stop: function () {
+              $(".framefix").css('pointer-events', 'auto');
+            }
+          });
+          $('#' + this.channel).resizable({
+            start: function () {
+              $(".framefix").css('pointer-events', 'none');
+            },
+            drag: function () {
+              $(".framefix").css('pointer-events', 'none');
+            },
+            stop: function () {
+              $(".framefix").css('pointer-events', 'auto');
+            }
+          });
+        },
+      });
+      var app = new Vue({
+        components: {
+          'vueSlider': window['vue-slider-component'],
+        },
+        data: {
+          title: "",
+          logo: "",
+          theater: "",
+          host: "",
+          addchannel: "",
+          vlist: [],
+          chatlist: [],
+          showfacebookpage: false,
+          zindex: [],
+          followlist: [],
+          mytid: "",
+          /**
+          title: channel tittle
+          logo: channel logo (unused)
+          theater: San min theater ok.ur link (from heroku backend [parse sklive info])
+          host: channel is now hosting... (from heroku backend [twitch secrete api entry point])
+          addchannel: input box value
+          vlist: Video list
+          chatlist: Chat list
+          showfacebookpage: Open Facebook Page
+          zindex: Control Z-index for float Page
+          followlist: following list
+          mytid: Following Twitch ID input box (unused)
+          **/
+        },
+        methods: {
+          getinfo() {
+            var self = this;
+            $.getJSON(
+              "https://api.twitch.tv/kraken/channels/tetristhegrandmaster3?client_id=f03diai4g1nzfwo3om1s87jvdq65hax",
+              function (data) {
+                self.title = data.status;
+                self.logo = data.logo;
+                console.log("Get Channel info...");
+                $.toast({
+                  heading: 'Success',
+                  text: '頻道資料讀取成功',
+                  showHideTransition: 'fade',
+                  icon: 'success'
+                });
+              });
+          },
+          gethost() {
+            var self = this;
+            self.theater = "";
+            self.host = "";
+            $.getJSON("https://crs-dlbot.herokuapp.com/cors", function (data) {
+              if (data.hosts[0].target_login) {
+                self.host = data.hosts[0].target_login;
+              }
+              self.theater = "https://ok.ru/videoembed/" + data.hosts[1].okurl + "?nochat=1&autoplay=1";
+              $.toast({
+                heading: 'Success',
+                text: 'Host,大戲院資料讀取成功',
+                showHideTransition: 'fade',
+                icon: 'success'
+              });
+            });
+          },
+          reloadinfo() {
+            this.getinfo();
+            this.gethost();
+          },
+          layerup(layerindex) {
+            temp = this.zindex[layerindex];
+            this.zindex[layerindex] = this.zindex[layerindex + 1];
+            this.zindex[layerindex + 1] = temp;
+            app.$forceUpdate();
+          },
+          layerdown(layerindex) {
+            temp = this.zindex[layerindex];
+            this.zindex[layerindex] = this.zindex[layerindex - 1];
+            this.zindex[layerindex - 1] = temp;
+            app.$forceUpdate();
+          },
+          addchat(name) {
+            this.chatlist.push(name);
+            //[Bug Fixed] Add new channel will cause Tab Freez
+            setTimeout(function () {
+              $('ul.tabs').tabs('select_tab', name + '-chat');
+              $('ul.tabs').tabs('select_tab', 'setting');
+            }, 200);
+          },
+          close: function (name) {
+            this.vlist[this.vlist.findIndex(item => item.name == name)] = {
+              "name": "",
+              "value": 0
+            };
+            this.zindex = this.zindex.filter(item => item !== name);
+            app.$forceUpdate();
+          },
+          closechat: function (name) {
+            this.chatlist = this.chatlist.filter(item => item !== name);
+          },
+          joinchannel: function (name) {
+            var self = this;
+            $.getJSON("https://api.twitch.tv/kraken/channels/" + name +
+              "?client_id=f03diai4g1nzfwo3om1s87jvdq65hax",
+              function (data) {
+                if (self.vlist.find(function (channel) {
+                    return channel.name == data.name;
+                  })) {
+                  $.toast({
+                    heading: 'Warning',
+                    text: '頻道已存在於列表中',
+                    showHideTransition: 'fade',
+                    icon: 'warning'
+                  });
+                } else {
+                  $.toast({
+                    heading: 'Success',
+                    text: '成功加入' + data.display_name + '頻道',
+                    showHideTransition: 'fade',
+                    icon: 'success'
+                  });
+                  self.zindex.push(data.name);
+                  self.vlist.push({
+                    "name": data.name,
+                    "value": 100
+                  });
+                  self.addchannel = "";
+                }
+                app.$forceUpdate();
+              }).fail(function (data) {
+              $.toast({
+                heading: 'Error',
+                text: '頻道' + name + '不存在',
+                showHideTransition: 'fade',
+                icon: 'error'
+              });
+            });
+          },
+          joinmain: function (mode) {
+            if (mode == 1) {
+              $(".mainp").html(
+                '<iframe  class="framefix" id="mainplayer" width="100%" height="100%" frameborder="0" framespacing="0" src="' +
+                this.theater + '"></iframe>');
+            } else if (mode == 2) {
+              $(".mainp").html(
+                '<iframe  class="framefix" id="mainplayer" width="100%" height="100%" frameborder="0" framespacing="0" src="https://player.twitch.tv/?channel=tetristhegrandmaster3"></iframe>'
+              );
+            } else if (mode == 3) {
+              $(".mainp").html(
+                '<iframe  class="framefix" id="mainplayer" width="100%" height="100%" frameborder="0" framespacing="0" src="https://player.twitch.tv/?channel=' +
+                this.host + '"></iframe>');
+            }
+          },
+          refreshslider: function () {
+            var self = this;
+            //[Bug Fixed] Refresh Slider When Slider is Visible (Or it will always 0)
+            this.$refs.slider.forEach(function (slider) {
+              self.$nextTick(() => slider.refresh());
+            });
+          },
+          searchchannel: function (mytid) {
+            /**
+               Get folloing List without OATH
+               pros: No OATH! Don't need to Link Twitch ID (get OATH token).
+               cons: Lot's Of Request.(30 now) 
+                     Inaccurate if a Channel streaming for a long time
+               Step:
+               1. Get 30 User Folloing List (Sort by last broadcast Time)
+               2. Get Stream Status (30 times Request Needed)
+               [issue] If a channel stream for a long time (and another 30 channel Streaming after it), list will not include that channel
+               Can fixed by increase number from 30 to 100(max), but also means more Request needed.
+            **/
+            var self = this;
+            $.getJSON("https://api.twitch.tv/kraken/users/" + mytid +
+              "/follows/channels?client_id=f03diai4g1nzfwo3om1s87jvdq65hax&limit=30&sortby=last_broadcast",
+              function (data) {
+                self.followlist.length = 0;
+                data.follows.forEach(function (cid) {
+                  $.getJSON("https://api.twitch.tv/kraken/streams/" + cid.channel.name +
+                    "?client_id=f03diai4g1nzfwo3om1s87jvdq65hax",
+                    function (Cdata) {
+                      if (Cdata.stream) {
+                        self.followlist.push({
+                          "id": cid.channel.name,
+                          "name": cid.channel.display_name,
+                          "pic": Cdata.stream.preview.medium,
+                          "status": cid.channel.status,
+                          "game": Cdata.stream.game
+                        });
+                      }
+                    });
+                });
+                $.toast({
+                  heading: 'Success',
+                  text: '成功讀取列表',
+                  showHideTransition: 'fade',
+                  icon: 'success'
+                });
+                app.$forceUpdate();
+              }).fail(function (data) {
+              $.toast({
+                heading: 'Error',
+                text: '請輸入正確的Twitch ID',
+                showHideTransition: 'fade',
+                icon: 'error'
+              });
+            });
+          },
+        },
+        beforeMount() {
+          this.getinfo();
+          this.gethost();
+        },
+      }).$mount('#app');
+    </script>
+
+</body>
+
+</html>
