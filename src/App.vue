@@ -1,28 +1,37 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app
+    id="app"
+    dark
+  >
+    <TheHeader/>
+    <TheContent/>
+    <TheSideBar/>
+  </v-app>
 </template>
 
+<style lang="postcss">
+html {
+  background: black;
+  overflow: hidden !important;
+}
+</style>
+
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import TheHeader from './components/TheHeader'
+import TheContent from './components/TheContent'
+import TheSideBar from './components/TheSideBar'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    TheHeader,
+    TheContent,
+    TheSideBar
+  },
+  mounted () {
+    if (Object.keys(this.$store.state.Config).length) {
+      this.$store.dispatch('View/FetchInfo')
+    }
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>

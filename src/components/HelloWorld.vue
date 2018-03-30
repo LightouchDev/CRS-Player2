@@ -56,10 +56,12 @@
 <script>
 export default {
   name: 'HelloWorld',
+  props: {
     msg: {
       default: 'Welcome',
       type: String
     }
+  }
 }
 </script>
 
