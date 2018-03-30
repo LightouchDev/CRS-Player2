@@ -25,7 +25,7 @@ export default {
       View: 'View'
     }),
     src () {
-      return `http://www.twitch.tv/${this.channel}/chat`
+      return `//www.twitch.tv/${this.channel}/chat`
     }
   }
 }
