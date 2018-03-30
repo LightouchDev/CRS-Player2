@@ -10,7 +10,7 @@ try {
 } catch (error) {}
 
 module.exports = {
-  baseUrl: '/crs-player2/',
+  baseUrl: '/CRS-Player2/',
   configureWebpack: {
     plugins: [
       new webpack.DefinePlugin({
