@@ -20,7 +20,7 @@ export default {
   },
   computed: {
     src () {
-      return `//www.twitch.tv/${this.channel}/chat`
+      return `//www.twitch.tv/embed/${this.channel}/chat`
     }
   }
 }
