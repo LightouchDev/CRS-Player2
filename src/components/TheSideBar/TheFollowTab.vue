@@ -133,6 +133,7 @@ export default {
       } else {
         eventBus.emit('toast-error', '請輸入帳號。')
       }
+      this.loginName = ''
     }
   }
 }

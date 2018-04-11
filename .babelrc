@@ -3,6 +3,12 @@
     "@vue/app"
   ],
   "plugins": [
-    "transform-strict-mode"
+    "transform-strict-mode",
+    ["transform-imports", {
+      "vuetify": {
+        "transform": "vuetify/es5/components/${member}",
+        "preventFullImport": true
+      }
+    }]
   ]
 }

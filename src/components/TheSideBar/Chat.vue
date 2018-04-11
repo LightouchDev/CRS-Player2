@@ -1,6 +1,6 @@
 <template>
   <iframe
-    :src="src"
+    :src="`//www.twitch.tv/embed/${channel}/chat`"
     frameborder="0"
     scrolling="no"
     height="100%"
@@ -16,11 +16,6 @@ export default {
       default: '',
       type: String,
       required: true
-    }
-  },
-  computed: {
-    src () {
-      return `//www.twitch.tv/embed/${this.channel}/chat`
     }
   }
 }

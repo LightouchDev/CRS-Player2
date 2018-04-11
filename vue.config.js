@@ -5,6 +5,6 @@ module.exports = {
       alias: {
         '@fortawesome/fontawesome-free-brands$': '@fortawesome/fontawesome-free-brands/shakable.es.js'
       }
-    }  
-  },
+    }
+  }
 }

@@ -10,7 +10,7 @@
     />
     <v-toolbar-title>{{ View.title }}</v-toolbar-title>
     <v-spacer/>
-    <v-toolbar-items v-if="preset.mainChannel">
+    <v-toolbar-items>
       <v-menu
         bottom
         left

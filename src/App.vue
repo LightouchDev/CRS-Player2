@@ -23,7 +23,6 @@ import { preset } from './utils'
 import TheHeader from './components/TheHeader'
 import TheContent from './components/TheContent'
 import TheSideBar from './components/TheSideBar'
-import TheFloatLayer from './components/TheFloatLayer'
 import TheToast from './components/TheToast'
 
 export default {
@@ -32,7 +31,7 @@ export default {
     TheHeader,
     TheContent,
     TheSideBar,
-    TheFloatLayer,
+    TheFloatLayer: () => import('./components/TheFloatLayer'),
     TheToast
   },
   mounted () {

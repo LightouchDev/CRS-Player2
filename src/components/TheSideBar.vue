@@ -116,13 +116,14 @@
 </style>
 
 <script>
+import TheChatTab from './TheSideBar/TheChatTab'
 import { mapState } from 'vuex'
 import { preset } from '@/utils'
 
 export default {
   name: 'TheSideBar',
   components: {
-    TheChatTab: () => import('./TheSideBar/TheChatTab'),
+    TheChatTab,
     TheFollowTab: () => import('./TheSideBar/TheFollowTab'),
     TheSettingTab: () => import('./TheSideBar/TheSettingTab')
   },
