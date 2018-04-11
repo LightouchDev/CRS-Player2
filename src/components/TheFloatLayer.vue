@@ -1,5 +1,9 @@
 <template>
   <div id="the-float-layer">
+    <div
+      v-if="draging"
+      id="drag-background"
+    />
     <VueDraggableResizable
       v-for="({ login }, index) in Player.booted"
       v-if="Player.active[login]"
@@ -35,10 +39,17 @@
 <style lang="postcss">
 #the-float-layer {
   z-index: 999;
-  & .float-player, & .drag-handler, & .drag-wrapper {
+  & .float-player,
+  & .drag-handler,
+  & .drag-wrapper,
+  & #drag-background {
     height: 100%;
     width: 100%;
     position: absolute;
+  }
+  & #drag-background {
+    top: 0;
+    left: 0;
   }
   & .drag-wrapper {
     left: -5px;
@@ -64,7 +75,8 @@ export default {
   data () {
     return {
       active: {},
-      draggable: {}
+      draggable: {},
+      draging: false
     }
   },
   computed: {
@@ -76,6 +88,7 @@ export default {
     drag (login, bool) {
       this.$set(this.active, login, bool)
       this.$set(this.draggable, login, bool)
+      this.draging = bool
     },
     opacity (login) {
       return { opacity: this.Player.opacity[login] }
