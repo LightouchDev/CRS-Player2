@@ -2,12 +2,12 @@
   <div
     v-if="channel"
     :id="channel"
-    :style="style"
   >
     <iframe
       :src="src"
       height="100%"
       width="100%"
+      class="player-frame"
       frameborder="0"
       framespacing="0"
     />
@@ -28,29 +28,14 @@ export default {
     platform: {
       default: 'twitch',
       type: String
-    },
-    opacity: {
-      default: 100,
-      type: Number
-    },
-    'z_index': {
-      default: 1,
-      type: Number
     }
   },
   computed: {
-    style () {
-      return {
-        opacity: this.opacity,
-        'z-index': this.z_index
-      }
-    },
     src () {
       return this.platform === 'twitch'
-        ? 'https://player.twitch.tv/?channel=' + this.channel
-        : ''
+        ? `//player.twitch.tv/?channel=${this.channel}`
+        : this.channel
     }
   }
 }
 </script>
-

@@ -13,7 +13,7 @@
       <div v-show="isShow('placeholder')">
         <img
           id="placeholder"
-          :src="Config.placeholder"
+          :src="preset.placeholder"
         >
       </div>
     </v-container>
@@ -38,6 +38,7 @@
 <script>
 import { mapState } from 'vuex'
 import Player from './Player'
+import { preset } from '@/utils'
 
 export default {
   name: 'TheContent',
@@ -46,9 +47,11 @@ export default {
   },
   computed: {
     ...mapState([
-      'View', // fetch $Store.State.View into this.View
-      'Config' // fetch $Store.State.Config into this.Config
+      'View' // fetch $Store.State.View into this.View
     ])
+  },
+  created () {
+    this.preset = preset
   },
   methods: {
     isShow (type) {

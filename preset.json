@@ -1,0 +1,32 @@
+{
+  "client_id": "kimne78kx3ncx6brgo4mv6wki5h1ko",
+  "fb_widget": "https://www.facebook.com/v2.12/plugins/page.php?adapt_container_width=true&app_id=&channel=http%3A%2F%2Fstaticxx.facebook.com%2Fconnect%2Fxd_arbiter%2Fr%2FMs1VZf1Vg1J.js%3Fversion%3D42%23cb%3Df74608d1c2edc%26domain%3D%26origin%3Dfile%253A%252F%252F%252Ff6ad99404e22cc%26relation%3Dparent.parent&container_width=840&hide_cover=false&href=https%3A%2F%2Fwww.facebook.com%2Ftetristhegrandmaster3&locale=zh_TW&sdk=joey&show_facepile=true&small_header=false&tabs=timeline&width=500&height=720",
+  "mainChannel": "tetristhegrandmaster3",
+  "menu": [
+    {
+      "channel": {
+        "path": "hosts[1].okurl",
+        "source": "https://crs-dlbot.herokuapp.com/cors",
+        "template": "https://ok.ru/videoembed/%s?nochat=1&autoplay=1"
+      },
+      "label": "三民大戲院",
+      "platform": "odnoklassniki",
+      "toast": {
+        "success": "讀取大戲院資訊成功",
+        "error": "讀取大戲院資訊失敗"
+      },
+      "type": "misc"
+    }, {
+      "label": "彩學台",
+      "type": "mainChannel"
+    }, {
+      "type": "host"
+    }, {
+      "href": "http://tetristhe.droppages.com/clips.html",
+      "label": "精華剪輯",
+      "type": "link"
+    }
+  ],
+  "placeholder": "https://i.imgur.com/tqZiViA.png",
+  "titlePostfix": "實況主中途之家"
+}

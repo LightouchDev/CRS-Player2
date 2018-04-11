@@ -1,29 +1,49 @@
-import toast from '@/toast'
+import { eventBus, gql, info, warn, preset } from '@/utils'
+const { mainChannel, titlePostfix } = preset
 
 /**
- * activeFloatPlayer: the list of active twitch channel name.
  * currentChannel: the twitch channel name of the main player.
  * currentView: the current view of main window. value: 'placeholder' or 'player'
  * currentPlatform: the platform of current channel, it would affect the icon of the header bar.
+ * host: current hosting channel.
+ * live: is stream online.
+ * sidebar: show sidebar or not.
  * title: current page title, change this to modify header and browser title, default: package name
  */
 
 const state = {
-  activeFloatPlayer: [],
   currentChannel: '',
+  currentChat: mainChannel,
   currentPlatform: 'twitch',
   currentView: 'placeholder',
-  okChannelID: '',
+  enabledChat: [mainChannel],
+  host: '',
+  live: false,
+  sidebar: true,
   title: require('@/../package.json').productName
 }
 
 const mutations = {
+  ActiveChat (View, channel) {
+    if (!View.enabledChat.includes(channel)) {
+      View.enabledChat.push(channel)
+    }
+  },
+  ChangeChat (state, channel) {
+    state.currentChat = channel
+  },
+  UpdateChat (View, enabledChat) {
+    View.enabledChat = enabledChat
+  },
   Update (state, payload) {
     Object.assign(state, payload)
     // change title here
     if (payload.title) {
-      document.title = `${payload.title} - ${this.state.Config.titlePostfix}`
+      document.title = `${payload.title} - ${titlePostfix}`
     }
+  },
+  ToggleSidebar (View) {
+    View.sidebar = !View.sidebar
   }
 }
 
@@ -31,55 +51,66 @@ const actions = {
   Update ({ commit }, payload) {
     commit('Update', payload)
   },
+  ChangeChat ({ commit, state }, channel) {
+    if (!state.enabledChat.includes(channel)) {
+      commit('ActiveChat', channel)
+    }
+    commit('ChangeChat', channel)
+  },
+  RemoveChat ({ commit, state }, channel) {
+    const newArray = state.enabledChat.filter(item => item !== channel)
+    if (state.currentChat === channel) {
+      commit('ChangeChat', newArray[0])
+    }
+    commit('UpdateChat', newArray)
+  },
   FetchInfo ({ commit, state }) {
-    // FIXME: kraken api will expire in the end of 2018.
     /**
      * fetch main channel info
      */
-    const { mainChannel, client_id } = this.state.Config
-    fetch(`https://api.twitch.tv/kraken/channels/${mainChannel}?client_id=${client_id}`)
+    gql({
+      query: `query {
+        user(login: "${mainChannel}") {
+          broadcastSettings {
+            title
+          }
+          displayName
+          hosting {
+            login
+            displayName
+          }
+          stream {
+            id
+          }
+        }
+      }`
+    })
       .then(Response => Response.json())
-      .then(json => { 
+      .then(({ data }) => {
         commit('Update', {
-          title: json.status,
-          info: json
+          host: data.user.hosting.login || null,
+          live: !!data.user.stream.id,
+          title: data.user.broadcastSettings.title
         })
         this.commit('DisplayName/Update', {
-          [json.name]: json.display_name
+          [mainChannel]: data.user.displayName
         })
+        if (data.user.hosting.login) {
+          this.commit('DisplayName/Update', {
+            [data.user.hosting.login]: data.user.hosting.displayName
+          })
+        }
       })
-      .then(() => toast.open({
-        text: '擷取頻道資訊成功',
-        options: { color: 'success' }
-      }))
-      .catch((Reason) => toast.open({
-        text: `擷取頻道資訊發生錯誤 (${Reason})`,
-        options: { color: 'error' }
-      }))
-    /**
-     * Fetch hosting, external info
-     */
-    fetch('https://crs-dlbot.herokuapp.com/cors')
-    .then(Response => Response.json())
-    .then(({ hosts }) => {
-      // let obj = {}
-      /*
-      if (hosts[0].target_login) {
-        console.log(state)
-      }
-      */
-      commit('Update', {
-        CRS: hosts
+      .then(() => {
+        eventBus.emit('toast-success', '擷取頻道資訊成功')
+        eventBus.emit('parse-menu')
+        info('[Store] fetch from GraphQL success!')
       })
-    })
-    .then(() => toast.open({
-      text: '擷取 Host, 外部站台 成功',
-      options: { color: 'success' }
-    }))
-    .catch((Reason) => toast.open({
-      text: `擷取 Host, 外部站台 發生錯誤 (${Reason})`,
-      options: { color: 'error' }
-    }))
+      .catch((Reason) => {
+        eventBus.emit('toast-error', `擷取頻道資訊時發生錯誤 (${Reason})`)
+        eventBus.emit('fallback-menu')
+        warn(`[Store] fetch from GraphQL error (${Reason})`)
+      })
   }
 }
 

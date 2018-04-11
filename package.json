@@ -1,7 +1,7 @@
 {
   "name": "crs-player2",
   "productName": "CRS-Player2",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "author": "ChRiS38c28 (https://www.plurk.com/chris38c28)",
   "contributors": [
     "Miau Lightouch <miaulightouch@gmail.com>"
@@ -15,10 +15,15 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome": "^1.1.5",
-    "@fortawesome/fontawesome-free-brands": "^5.0.9",
+    "@fortawesome/fontawesome-free-brands": "^5.0.10",
     "@fortawesome/vue-fontawesome": "^0.0.22",
+    "debug": "^3.1.0",
+    "eventemitter3": "^3.0.1",
+    "lodash.get": "^4.4.2",
     "vue": "^2.5.13",
-    "vuetify": "^1.0.11",
+    "vue-draggable-resizable": "^1.7.1",
+    "vuedraggable": "^2.16.0",
+    "vuetify": "^1.0.14",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
@@ -28,13 +33,13 @@
     "babel-plugin-transform-strict-mode": "^6.24.1",
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0-beta.0",
-    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-import": "^2.10.0",
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-standard": "^3.0.1",
     "eslint-plugin-vue": "^4.4.0",
     "postcss-nesting": "^4.2.1",
-    "postcss-preset-env": "^3.4.0",
+    "postcss-preset-env": "^4.0.0",
     "vue-template-compiler": "^2.5.13"
   },
   "browserslist": [

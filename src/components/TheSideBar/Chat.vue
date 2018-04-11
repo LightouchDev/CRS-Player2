@@ -9,8 +9,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-
 export default {
   name: 'Chat',
   props: {
@@ -21,9 +19,6 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      View: 'View'
-    }),
     src () {
       return `//www.twitch.tv/${this.channel}/chat`
     }

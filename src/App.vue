@@ -6,6 +6,8 @@
     <TheHeader/>
     <TheContent/>
     <TheSideBar/>
+    <TheFloatLayer/>
+    <TheToast/>
   </v-app>
 </template>
 
@@ -17,19 +19,24 @@ html {
 </style>
 
 <script>
+import { preset } from './utils'
 import TheHeader from './components/TheHeader'
 import TheContent from './components/TheContent'
 import TheSideBar from './components/TheSideBar'
+import TheFloatLayer from './components/TheFloatLayer'
+import TheToast from './components/TheToast'
 
 export default {
   name: 'App',
   components: {
     TheHeader,
     TheContent,
-    TheSideBar
+    TheSideBar,
+    TheFloatLayer,
+    TheToast
   },
   mounted () {
-    if (Object.keys(this.$store.state.Config).length) {
+    if (Object.keys(preset).length) {
       this.$store.dispatch('View/FetchInfo')
     }
   }

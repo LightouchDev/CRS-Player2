@@ -1,10 +1,12 @@
 <template>
   <v-navigation-drawer
     id="the-side-bar"
+    v-model="View.sidebar"
     app
+    hide-overlay
+    mobile-break-point="0"
     right
     width="340"
-    disable-resize-watcher
   >
     <v-tabs
       id="side-bar-tabs"
@@ -20,7 +22,7 @@
           fixed-width
           size="lg"
         />
-        {{ getDisplayName(currentChat) }}
+        {{ getDisplayName(View.currentChat) }}
         <v-spacer/>
         <v-menu
           id="channel-drop-down"
@@ -41,7 +43,7 @@
             <v-list-tile
               v-for="channel in channelList"
               :key="channel"
-              :href="`#chat-${channel}`"
+              @click="$store.dispatch('View/ChangeChat', channel)"
             >
               {{ getDisplayName(channel) }}
             </v-list-tile>
@@ -51,9 +53,9 @@
       <v-tab href="#tab-setting">視窗設定</v-tab>
       <v-tab href="#tab-follow">已追隨</v-tab>
       <v-tabs-items v-model="currentTab">
-        <v-tab-item id="tab-chat"><TheChatHub :channel="currentChat"/></v-tab-item>
-        <v-tab-item id="tab-setting">Setting</v-tab-item>
-        <v-tab-item id="tab-follow">Follow</v-tab-item>
+        <v-tab-item id="tab-chat"><TheChatTab/></v-tab-item>
+        <v-tab-item id="tab-setting"><TheSettingTab/></v-tab-item>
+        <v-tab-item id="tab-follow"><TheFollowTab/></v-tab-item>
       </v-tabs-items>
     </v-tabs>
   </v-navigation-drawer>
@@ -79,7 +81,10 @@
   & .tabs__items {
     height: calc(100% - 48px);
   }
-  & .tabs__items div {
+  & > .tabs__items {
+    overflow-y: auto;
+  }
+  & .tabs__items #tab-chat, & .tabs__items #tab-chat div {
     height: 100%
   }
 
@@ -110,31 +115,33 @@
 
 <script>
 import { mapState } from 'vuex'
-import TheChatHub from './TheSideBar/TheChatHub'
+import { preset } from '@/utils'
 
 export default {
   name: 'TheSideBar',
   components: {
-    TheChatHub
+    TheChatTab: () => import('./TheSideBar/TheChatTab'),
+    TheFollowTab: () => import('./TheSideBar/TheFollowTab'),
+    TheSettingTab: () => import('./TheSideBar/TheSettingTab')
   },
   data () {
     return {
-      currentTab: null,
-      currentChat: null
+      currentTab: null
     }
   },
   computed: {
     ...mapState([
       'View',
-      'Config',
-      'DisplayName'
+      'DisplayName',
+      'Player'
     ]),
     channelList () {
-      return [this.Config.mainChannel, ...this.View.activeFloatPlayer]
+      return [
+        preset.mainChannel,
+        this.View.host,
+        ...this.Player.booted.map(obj => obj.login)
+      ]
     }
-  },
-  created () {
-    this.currentChat = this.Config.mainChannel
   },
   methods: {
     getDisplayName (channel) {

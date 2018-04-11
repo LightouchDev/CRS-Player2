@@ -9,7 +9,6 @@ import { faFacebook, faOdnoklassniki, faTwitch } from '@fortawesome/fontawesome-
 // local files
 import App from './App.vue'
 import store from './store'
-import toast from './toast'
 
 // setup Vuetify, theme generated from https://vuetifyjs.com/zh-Hans/theme-generator
 import 'vuetify/dist/vuetify.min.css'
@@ -33,9 +32,6 @@ fontawesome.library.add(faFacebook, faOdnoklassniki, faTwitch)
 
 // Use the icon component anywhere in the app
 Vue.component('font-awesome-icon', FontAwesomeIcon)
-
-// Insert toast into Vue and window
-Vue.prototype.$toast = toast
 
 new Vue({
   store,
