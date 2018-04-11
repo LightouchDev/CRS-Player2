@@ -38,7 +38,7 @@
 
 <style lang="postcss">
 #the-float-layer {
-  z-index: 999;
+  z-index: 100;
   & .float-player,
   & .drag-handler,
   & .drag-wrapper,
