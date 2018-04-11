@@ -15,6 +15,7 @@
     >
       <v-tab
         id="label-chat"
+        ref="tabChat"
         href="#tab-chat"
       >
         <font-awesome-icon
@@ -38,6 +39,7 @@
           </a>
           <v-list
             id="channel-list"
+            :style="menuStyle"
             dense
           >
             <v-list-tile
@@ -126,7 +128,8 @@ export default {
   },
   data () {
     return {
-      currentTab: null
+      currentTab: null,
+      menuWidth: 0
     }
   },
   computed: {
@@ -141,7 +144,17 @@ export default {
         this.View.host,
         ...this.Player.booted.map(obj => obj.login)
       ]
+    },
+    menuStyle () {
+      if (this.menuWidth) {
+        return {
+          width: this.menuWidth + 'px'
+        }
+      }
     }
+  },
+  mounted () {
+    this.menuWidth = this.$refs.tabChat.$el.getBoundingClientRect().width
   },
   methods: {
     getDisplayName (channel) {
