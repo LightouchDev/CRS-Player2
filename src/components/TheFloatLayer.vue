@@ -15,7 +15,7 @@
       :resizable="true"
       :w="320"
       :h="180"
-      :z="index * 10"
+      :z="100 - index"
       :style="[opacity(login)]"
       drag-handle=".drag-handler"
       @deactivated="drag(login, false)"
