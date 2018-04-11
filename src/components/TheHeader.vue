@@ -41,7 +41,7 @@
             <v-list-tile-title>{{ item.label }}</v-list-tile-title>
           </v-list-tile>
           <v-list-tile
-            v-show="preset.fb_widget"
+            v-if="preset.fb_widget"
             @click="facebookWidget = true"
           >
             <font-awesome-icon
@@ -53,7 +53,7 @@
             臉書專頁
           </v-list-tile>
           <v-list-tile
-            v-show="preset.placeholder"
+            v-if="preset.placeholder"
             @click="$store.commit('View/Update', { currentView: 'placeholder' })"
           >
             <v-icon class="tile-icon">help</v-icon>
@@ -78,6 +78,7 @@
       max-width="500px"
     >
       <iframe
+        v-if="facebookWidget"
         id="facebook-widget"
         :src="preset.fb_widget"
         class="elevation-8"
