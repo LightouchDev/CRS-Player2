@@ -13,7 +13,7 @@ const mutations = {
     // do not launch main channel to float player.
     if (preset.mainChannel === channelInfo.login) return
 
-    Player.booted.some(obj => obj.login === channelInfo.login) || Player.booted.push(channelInfo)
+    Player.booted.some(obj => obj.login === channelInfo.login) || Player.booted.unshift(channelInfo)
     Vue.set(Player.active, channelInfo.login, true)
     Vue.set(Player.opacity, channelInfo.login, 100)
   },
