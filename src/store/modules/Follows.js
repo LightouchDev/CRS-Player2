@@ -55,10 +55,6 @@ const mutations = {
   Empty (Follows) {
     Vue.set(Follows, 'ready', false)
     Vue.set(Follows, 'list', [])
-    /*
-    state.ready = false
-    state.list = []
-    */
   },
   Fetched (Follows) {
     Follows.fetching = false
@@ -68,15 +64,10 @@ const mutations = {
   },
   Ready (Follows) {
     Vue.set(Follows, 'ready', true)
-    // state.ready = true
   },
   SortAndReady (Follows) {
     Vue.set(Follows, 'list', SortAndReconstruct.call(this, state.list))
     Vue.set(Follows, 'ready', true)
-    /*
-    state.list = SortAndReconstruct.call(this, state.list)
-    state.ready = true
-    */
   },
   Update (Follows, edges) {
     Vue.set(Follows, 'list', state.list.concat(
@@ -85,13 +76,6 @@ const mutations = {
         .filter(node => node.login) // check user exist
     ))
 
-    /*
-    state.list = state.list.concat(
-      edges
-        .map(({ node }) => node)
-        .filter(node => node.login) // check user exist
-    )
-    */
     edges.forEach(({ node }) =>
       warn('ID: %s', node.login))
   }

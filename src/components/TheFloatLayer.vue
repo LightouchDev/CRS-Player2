@@ -6,7 +6,7 @@
       class="drag-background"
     />
     <VueDraggableResizable
-      v-for="({ login }, index) in orderList"
+      v-for="({ login }) of Player.bootedChannel"
       v-if="Player.active[login]"
       :key="login"
       :active="active[login]"
@@ -16,7 +16,7 @@
       :resizable="true"
       :w="480"
       :h="270"
-      :z="100 - (active[login] ? -1 : index)"
+      :z="100 - (active[login] ? -1 : Player.order.indexOf(login))"
       :style="[opacity(login)]"
       drag-handle=".drag-handler"
       @deactivated="drag(login, false)"
@@ -40,6 +40,9 @@
 <style lang="postcss">
 #the-float-layer {
   z-index: 100;
+  & .handle {
+    z-index: 101;
+  }
   & .float-player,
   & .drag-handler,
   & .drag-wrapper {
@@ -58,6 +61,7 @@
   & .drag-wrapper {
     left: -5px;
     top: -5px;
+    background: black;
     border: 5px solid rgba(180,180,180,0.55);
     border-radius: 5px;
     box-sizing: content-box;
@@ -85,11 +89,7 @@ export default {
   computed: {
     ...mapState([
       'Player'
-    ]),
-    orderList () {
-      return this.Player.order
-        .map(channel => this.Player.bootedChannel[channel])
-    }
+    ])
   },
   methods: {
     drag (login, bool) {
@@ -97,7 +97,7 @@ export default {
       this.dragging = bool
     },
     opacity (login) {
-      return { opacity: this.Player.opacity[login] }
+      return { opacity: this.active[login] ? 100 : this.Player.opacity[login] }
     }
   }
 }

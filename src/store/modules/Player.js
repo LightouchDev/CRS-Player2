@@ -11,17 +11,15 @@ const state = {
 
 const mutations = {
   Add (Player, channelInfo) {
+    const { login } = channelInfo
     // do not launch main channel to float player.
     if (preset.mainChannel === channelInfo.login) return
+    if (Player.bootedChannel[login]) return
 
-    const { login } = channelInfo
-
-    if (!Player.bootedChannel[login]) {
-      Vue.set(Player.bootedChannel, login, channelInfo)
-      Player.order.unshift(login)
-    }
+    Vue.set(Player.bootedChannel, login, channelInfo)
     Vue.set(Player.active, login, true)
     Vue.set(Player.opacity, login, 100)
+    Player.order.unshift(login)
   },
   Disable (Player, channel) {
     Vue.set(Player.active, channel, false)
@@ -52,7 +50,7 @@ const mutations = {
     Vue.set(Player.active, channel, !Player.active[channel])
   },
   UpdateOrder (Player, order) {
-    Vue.set(Player, 'order', order)
+    Player.order = order
   }
 }
 
