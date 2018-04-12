@@ -16,6 +16,10 @@
           :src="preset.placeholder"
         >
       </div>
+      <span
+        id="version-text"
+        v-text="`v${require('@/../package.json').version}`"
+      />
     </v-container>
   </v-content>
 </template>
@@ -27,11 +31,18 @@
 }
 #container {
   padding: 0;
+  position: relative;
 }
 #placeholder {
   display: block;
   width: 100%;
   height: auto;
+}
+#version-text {
+  position: absolute;
+  pointer-events: none;
+  right: 10px;
+  bottom: 0;
 }
 </style>
 
