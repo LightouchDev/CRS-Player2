@@ -155,7 +155,7 @@ export default {
         preset.mainChannel,
         this.View.host,
         ...this.Player.order
-      ]
+      ].filter(value => value) // remove falsy value
     },
     menuStyle () {
       if (this.menuWidth) {
