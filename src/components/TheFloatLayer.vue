@@ -2,20 +2,20 @@
   <div id="the-float-layer">
     <div
       v-show="dragging"
-      :style="{ 'z-index': 100 - (dragging ? -1 : index) }"
+      :style="{ 'z-index': 101 }"
       class="drag-background"
     />
     <VueDraggableResizable
-      v-for="({ login }, index) in Player.booted"
+      v-for="({ login }, index) in orderList"
       v-if="Player.active[login]"
       :key="login"
       :active="active[login]"
-      :minh="180"
-      :minw="320"
+      :minh="270"
+      :minw="480"
       :draggable="true"
       :resizable="true"
-      :w="320"
-      :h="180"
+      :w="480"
+      :h="270"
       :z="100 - (active[login] ? -1 : index)"
       :style="[opacity(login)]"
       drag-handle=".drag-handler"
@@ -85,7 +85,11 @@ export default {
   computed: {
     ...mapState([
       'Player'
-    ])
+    ]),
+    orderList () {
+      return this.Player.order
+        .map(channel => this.Player.bootedChannel[channel])
+    }
   },
   methods: {
     drag (login, bool) {

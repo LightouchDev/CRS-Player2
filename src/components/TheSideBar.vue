@@ -45,8 +45,14 @@
             <v-list-tile
               v-for="channel in channelList"
               :key="channel"
+              :class="channel === View.currentChat ? 'info' : ''"
               @click="$store.dispatch('View/ChangeChat', channel)"
             >
+              <font-awesome-icon
+                :icon="['fab', 'twitch']"
+                fixed-width
+                size="lg"
+              />
               {{ getDisplayName(channel) }}
             </v-list-tile>
           </v-list>
@@ -112,6 +118,11 @@
 }
 #channel-list {
   margin-top: 2px;
+  & .list__tile {
+    padding: 0 12px;
+    font-size: 14px;
+    font-weight: 500;
+  }
 }
 </style>
 
@@ -143,7 +154,7 @@ export default {
       return [
         preset.mainChannel,
         this.View.host,
-        ...this.Player.booted.map(obj => obj.login)
+        ...this.Player.order
       ]
     },
     menuStyle () {
@@ -155,7 +166,12 @@ export default {
     }
   },
   mounted () {
-    this.menuWidth = this.$refs.tabChat.$el.getBoundingClientRect().width
+    const setWidth = () => {
+      this.menuWidth = this.$refs.tabChat.$el.getBoundingClientRect().width
+    }
+    document.readyState === 'complete'
+      ? setWidth()
+      : window.addEventListener('load', setWidth)
   },
   methods: {
     getDisplayName (channel) {

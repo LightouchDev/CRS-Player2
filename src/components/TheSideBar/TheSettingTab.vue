@@ -18,53 +18,53 @@
         </div>
       </v-toolbar>
       <draggable
-        v-model="bootedList"
+        v-model="orderList"
         :options="{ handle: '.drag-handle' }"
         element="v-list"
         two-line
       >
         <div
-          v-for="channel in bootedList"
-          :key="channel.login"
+          v-for="channel in orderList"
+          :key="channel"
         >
           <v-list-tile>
             <v-list-tile-action class="drag-handle">
               <v-icon>drag_handle</v-icon>
             </v-list-tile-action>
-            <template v-if="channel.previewImageURL">
+            <template v-if="Player.bootedChannel[channel].previewImageURL">
               <v-list-tile-avatar
                 class="preview-image"
                 size="60"
                 tile
               >
-                <img :src="channel.previewImageURL">
+                <img :src="Player.bootedChannel[channel].previewImageURL">
               </v-list-tile-avatar>
             </template>
             <template v-else>
               <v-list-tile-avatar size="50">
-                <img :src="channel.profileImageURL">
+                <img :src="Player.bootedChannel[channel].profileImageURL">
               </v-list-tile-avatar>
             </template>
             <v-list-tile-content>
-              <v-list-tile-title v-text="getDisplayName(channel.login)"/>
+              <v-list-tile-title v-text="getDisplayName(channel)"/>
               <v-layout class="setting-controll">
                 <v-btn
-                  :class="getButtonColor(channel.login)"
+                  :class="getButtonColor(channel)"
                   flat
                   icon
                   small
-                  @click="toggleVisibility(channel)"
+                  @click="toggleVisibility(Player.bootedChannel[channel])"
                 >
-                  <v-icon>{{ getButtonIcon(channel) }}</v-icon>
+                  <v-icon>{{ getButtonIcon(Player.bootedChannel[channel]) }}</v-icon>
                 </v-btn>
                 <v-slider
-                  :value="Player.opacity[channel.login]"
+                  :value="Player.opacity[channel]"
                   class="slider-controll"
                   hide-details
                   max="1"
                   min="0"
                   step="0.01"
-                  @input="updateOpacity(channel.login, $event)"
+                  @input="updateOpacity(channel, $event)"
                 />
               </v-layout>
             </v-list-tile-content>
@@ -131,9 +131,9 @@ export default {
       'Follows',
       'Player'
     ]),
-    bootedList: {
+    orderList: {
       get () {
-        return this.$store.state.Player.booted
+        return this.Player.order
       },
       set (value) {
         this.$store.commit('Player/UpdateOrder', value.filter(value => value))
@@ -159,7 +159,7 @@ export default {
         : channel
     },
     openPlayer () {
-      if (this.Player.booted.some(obj => obj.login === this.loginName)) {
+      if (this.Player.bootedChannel[this.loginName]) {
         this.loginName = ''
         return
       }

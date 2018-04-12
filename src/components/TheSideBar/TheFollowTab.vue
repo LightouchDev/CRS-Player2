@@ -22,35 +22,37 @@
         two-line
       >
         <!-- FIXME: lazy lister -->
-        <v-list-tile
-          v-for="channel in Follows.list"
-          :key="channel.login"
-          :class="listItemColor(channel.login)"
-          @click="openPlayer(channel.login)"
-        >
-          <template v-if="channel.previewImageURL">
-            <v-list-tile-avatar
-              class="preview-image"
-              size="60"
-              tile
-            >
-              <img :src="channel.previewImageURL">
-              <div id="indicator"><span style="color: red">⬤</span> LIVE</div>
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title v-text="channel.title"/>
-              <v-list-tile-sub-title v-text="getDisplayName(channel.login)"/>
-            </v-list-tile-content>
-          </template>
-          <template v-else>
-            <v-list-tile-avatar size="50">
-              <img :src="channel.profileImageURL">
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title v-text="getDisplayName(channel.login)"/>
-            </v-list-tile-content>
-          </template>
-        </v-list-tile>
+        <template v-for="channel in Follows.list">
+          <v-list-tile
+            :key="channel.login"
+            :class="listItemColor(channel.login)"
+            @click="openPlayer(channel.login)"
+          >
+            <template v-if="channel.previewImageURL">
+              <v-list-tile-avatar
+                class="preview-image"
+                size="60"
+                tile
+              >
+                <img :src="channel.previewImageURL">
+                <div id="indicator"><span style="color: red">⬤</span> LIVE</div>
+              </v-list-tile-avatar>
+              <v-list-tile-content>
+                <v-list-tile-title v-text="channel.title"/>
+                <v-list-tile-sub-title v-text="getDisplayName(channel.login)"/>
+              </v-list-tile-content>
+            </template>
+            <template v-else>
+              <v-list-tile-avatar size="50">
+                <img :src="channel.profileImageURL">
+              </v-list-tile-avatar>
+              <v-list-tile-content>
+                <v-list-tile-title v-text="getDisplayName(channel.login)"/>
+              </v-list-tile-content>
+            </template>
+          </v-list-tile>
+          <v-divider :key="`divider-${channel.login}`"/>
+        </template>
       </v-list>
     </v-flex>
   </v-layout>
@@ -113,11 +115,10 @@ export default {
     },
     listItemColor (channel) {
       if (channel === preset.mainChannel) return 'info'
-      if (this.Player.booted.some(obj => obj.login === channel)) return 'success'
+      if (this.Player.bootedChannel[channel]) return 'success'
     },
     openPlayer (channel) {
-      // FIXME: split order, and clinet info array
-      if (this.Player.booted.some(obj => obj.login === channel)) {
+      if (this.Player.bootedChannel[channel]) {
         this.$store.commit('Player/Remove', channel)
       } else {
         this.$store.commit(

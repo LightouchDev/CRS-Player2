@@ -3,9 +3,10 @@ import { eventBus, gql, info, warn, preset } from '@/utils'
 
 const state = {
   active: {},
-  booted: [],
+  bootedChannel: {},
   fetching: false,
-  opacity: {}
+  opacity: {},
+  order: []
 }
 
 const mutations = {
@@ -13,9 +14,14 @@ const mutations = {
     // do not launch main channel to float player.
     if (preset.mainChannel === channelInfo.login) return
 
-    Player.booted.some(obj => obj.login === channelInfo.login) || Player.booted.unshift(channelInfo)
-    Vue.set(Player.active, channelInfo.login, true)
-    Vue.set(Player.opacity, channelInfo.login, 100)
+    const { login } = channelInfo
+
+    if (!Player.bootedChannel[login]) {
+      Vue.set(Player.bootedChannel, login, channelInfo)
+      Player.order.unshift(login)
+    }
+    Vue.set(Player.active, login, true)
+    Vue.set(Player.opacity, login, 100)
   },
   Disable (Player, channel) {
     Vue.set(Player.active, channel, false)
@@ -33,19 +39,20 @@ const mutations = {
     Player.fetching = true
   },
   Remove (Player, channel) {
-    if (Player.booted.some(obj => obj.login === channel)) {
+    if (Player.bootedChannel[channel]) {
+      Vue.delete(Player.bootedChannel, channel)
       Vue.delete(Player.active, channel)
       Vue.delete(Player.opacity, channel)
+      Vue.set(Player, 'order', Player.order.filter(item => item !== channel))
     }
-    Vue.set(Player, 'booted', Player.booted.filter(obj => obj.login !== channel))
 
     this.dispatch('View/RemoveChat', channel)
   },
   ToggleVisibility (Player, channel) {
     Vue.set(Player.active, channel, !Player.active[channel])
   },
-  UpdateOrder (Player, booted) {
-    Vue.set(Player, 'booted', booted)
+  UpdateOrder (Player, order) {
+    Vue.set(Player, 'order', order)
   }
 }
 
